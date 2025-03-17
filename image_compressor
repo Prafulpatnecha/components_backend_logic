@@ -1,0 +1,43 @@
+File? _image;
+  final picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      File originalFile = File(pickedFile.path); // ✅ Convert XFile to File
+
+      // Compress Image and update _image
+      File? compressedFile = await testCompressAndGetFile(originalFile);
+
+      if (compressedFile != null) {
+        setState(() {
+          _image = compressedFile; // ✅ Store compressed image
+        });
+      }
+    }
+  }
+
+  Future<File?> testCompressAndGetFile(File file) async {
+    final dir = await getTemporaryDirectory();
+    String targetPath = '${dir.path}/compressed_${file.path.split('/').last}';
+
+    XFile? result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 75,
+      // rotate: 180,
+    );
+
+    if (result != null) {
+      print("Original Size: ${file.lengthSync()} bytes");
+      print("Compressed Size: ${File(result.path).lengthSync()} bytes");
+    }
+
+    return File(result!.path);
+  }
+
+
+  package -:
+    flutter_image_compress: ^2.4.0
+    image_picker: ^1.1.2

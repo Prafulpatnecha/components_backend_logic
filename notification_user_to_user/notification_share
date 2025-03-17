@@ -1,0 +1,75 @@
+import 'dart:convert';
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:googleapis_auth/googleapis_auth.dart';
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart' show rootBundle;
+
+import 'firebase_options.dart';
+
+
+Future<String?> getAccessToken() async {
+  try {
+    // Load JSON file from assets
+    final jsonString = await rootBundle.loadString('assets/flutterchat-e5565-firebase-adminsdk-wjeyo-ef021c0914.json');
+    final credentials = ServiceAccountCredentials.fromJson(json.decode(jsonString));
+
+    // Define required scopes
+    final scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
+
+    // Authenticate using service account
+    final client = await clientViaServiceAccount(credentials, scopes);
+
+    // Return access token
+    return client.credentials.accessToken.data;
+  } catch (e) {
+    print('Error getting access token: $e');
+    return null;
+  }
+}
+
+Future<void> sendFCMMessage(String deviceToken, String title, String body) async {
+  final accessToken = await getAccessToken();
+
+  if (accessToken == null) {
+    print('Failed to get access token');
+    return;
+  }
+
+  final message = {
+    "message": {
+      "token": deviceToken,
+      "notification": {
+        "title": title,
+        "body": body
+      }
+    }
+  };
+  String projectId = "flutterchat-e5565";
+  final response = await http.post(
+    Uri.parse('https://fcm.googleapis.com/v1/projects/$projectId/messages:send'),
+    headers: {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    },
+    body: json.encode(message),
+  );
+
+  if (response.statusCode == 200) {
+    print('Successfully sent message: ${response.body}');
+  } else {
+    print('Error sending message: ${response.body}');
+  }
+}
+
+void sendMessage() async {
+  await sendFCMMessage(
+    /*user sender token*/
+      'cRaluUrhTluVH8TM8je3pw:APA91bEoy0Rut_M20g-WgM1u8VpOp73FgxTCEythM0yZCUGYVKOCEbJ1OJ4c5tgzf1QCENLSUTqO9whf6-wlV45wDF6_69fIaJWHi-9v4iJcI8wvjNuJBsU',
+      'New Message',
+      'You have a new chat message!'
+  );
+}

@@ -1,0 +1,13 @@
+  cupertino_icons: ^1.0.8
+  firebase_messaging: ^15.2.4
+  firebase_in_app_messaging: ^0.8.1+4
+  provider: ^6.1.2
+  firebase_core: ^3.12.1
+  http: ^1.3.0
+  googleapis_auth: ^1.6.0
+  googleapis: any  # For accessing Google APIs if needed
+
+
+//todo json file comes firebase settings
+    assets:
+    - assets/flutterchat-e5565-firebase-adminsdk-wjeyo-ef021c0914.json
