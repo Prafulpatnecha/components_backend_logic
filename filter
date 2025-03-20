@@ -1,0 +1,29 @@
+void clientDataEntryData({required String value,required String elements}){
+    if(snapshotListData.isNotEmpty){
+
+      if(value.isNotEmpty)
+      {
+        Set<String> seenNames = {};
+
+      valueListSet = snapshotListData.where((element) {
+        String dataValue = element['name'].toString().toLowerCase();
+
+        if (dataValue.contains(value.toLowerCase()) && !seenNames.contains(dataValue)) {
+          seenNames.add(dataValue);
+          return true;
+        }
+        return false;
+      }).toList();
+        print(valueListSet);
+        snapshotListDataSet = valueListSet;
+        print(snapshotListDataSet);
+      }else{
+        snapshotListDataSet = [];
+        valueListSet.clear();
+      }
+    }else{
+      snapshotListDataSet = [];
+      valueListSet.clear();
+    }
+    notifyListeners();
+  }

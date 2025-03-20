@@ -41,3 +41,4 @@ File? _image;
   package -:
     flutter_image_compress: ^2.4.0
     image_picker: ^1.1.2
+    path_provider: ^2.1.5
