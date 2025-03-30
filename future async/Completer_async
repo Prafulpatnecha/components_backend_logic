@@ -1,0 +1,25 @@
+// Show the rewarded ad
+Future<bool> showAd() async {
+  if (_isAdLoaded) {
+    Completer<bool> completer = Completer<bool>();
+
+    rewardedAd.show(
+      onUserEarnedReward: (ad, reward) {
+        if (reward.amount == 1) {
+          completer.complete(true); // Reward mila, true return karega
+        } else {
+          completer.complete(false); // Reward nahi mila, false return karega
+        }
+        log('User earned reward: ${reward.amount} ${reward.type}');
+      },
+    );
+
+    _isAdLoaded = false;
+    loadAd(); // Agla ad load karo
+
+    return completer.future; // Wait karega jab tak reward mile
+  } else {
+    print("Ad not loaded yet.");
+    return false;
+  }
+}
