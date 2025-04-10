@@ -46,7 +46,6 @@ Future<String?> getAccessToken() async {
     return null;
   }
 }
-
 Future<void> sendFCMMessage(String deviceToken, String title, String body) async {
   final accessToken = await getAccessToken();
 
@@ -61,6 +60,7 @@ Future<void> sendFCMMessage(String deviceToken, String title, String body) async
       "notification": {
         "title": title,
         "body": body
+        // "image": imageUrl, // <-- Add your image URL here
       }
     }
   };
