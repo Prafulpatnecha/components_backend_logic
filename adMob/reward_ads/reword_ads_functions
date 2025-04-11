@@ -1,0 +1,53 @@
+
+
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+class AdmobProvider extends ChangeNotifier{
+  late RewardedAd _rewardedAd;
+  bool _isAdLoaded = false;
+  // your adUnitId this original one
+  final String adUnitId = 'ca-app-pub-[add your id]/[add your id]';
+  // Method to load the ad
+  void loadAd() {
+    RewardedAd.load(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+            _rewardedAd = ad; // Save the loaded ad
+            _isAdLoaded = true;
+          // setState(() {
+          // });
+          print('Rewarded Ad Loaded');
+        },
+        onAdFailedToLoad: (error) {
+            _isAdLoaded = false;
+          // setState(() {
+          // });
+          debugPrint('Ad failed to load: ${error.message}');
+        },
+      ),
+    );
+  }
+
+  // Show the rewarded ad
+  void showAd() {
+    if (_isAdLoaded) {
+      _rewardedAd.show(
+        onUserEarnedReward: (ad, reward) {
+          // You can handle the reward logic here
+          log('User earned reward: ${reward.amount} ${reward.type}');
+        },
+      );
+        _isAdLoaded = false;
+      // setState(() {
+      // });
+      loadAd(); // Load another ad once the current one is shown
+    } else {
+      print("Ad not loaded yet.");
+    }
+  }
+}
