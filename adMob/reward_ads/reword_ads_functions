@@ -1,53 +1,96 @@
 
-
+import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:omg_study_material/routes/routes.dart';
 
-class AdmobProvider extends ChangeNotifier{
-  late RewardedAd _rewardedAd;
-  bool _isAdLoaded = false;
-  // your adUnitId this original one
-  final String adUnitId = 'ca-app-pub-[add your id]/[add your id]';
-  // Method to load the ad
-  void loadAd() {
-    RewardedAd.load(
-      adUnitId: adUnitId,
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-            _rewardedAd = ad; // Save the loaded ad
-            _isAdLoaded = true;
-          // setState(() {
-          // });
-          print('Rewarded Ad Loaded');
-        },
-        onAdFailedToLoad: (error) {
-            _isAdLoaded = false;
-          // setState(() {
-          // });
-          debugPrint('Ad failed to load: ${error.message}');
-        },
-      ),
-    );
+import '../../php/point/get_points.dart';
+
+late RewardedAd rewardedAd;
+bool _isAdLoaded = false;
+final String adUnitId = 'ca-app-pub-[add your id]/[add your id]';
+
+class RewordAdMob extends StatefulWidget {
+  RewordAdMob({super.key,required this.child});
+  late Widget child;
+  @override
+  State<RewordAdMob> createState() => _RewordAdMobState();
+}
+
+class _RewordAdMobState extends State<RewordAdMob> {
+
+  @override
+  void initState() {
+    super.initState();
+    loadAd(); // Load the ad when the page is initialized
   }
 
-  // Show the rewarded ad
-  void showAd() {
-    if (_isAdLoaded) {
-      _rewardedAd.show(
-        onUserEarnedReward: (ad, reward) {
-          // You can handle the reward logic here
-          log('User earned reward: ${reward.amount} ${reward.type}');
-        },
-      );
-        _isAdLoaded = false;
-      // setState(() {
-      // });
-      loadAd(); // Load another ad once the current one is shown
-    } else {
-      print("Ad not loaded yet.");
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    rewardedAd.dispose(); // Dispose the ad when it's no longer needed
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TestProvider testProviderTrue = Provider.of<TestProvider>(context, listen: true);
+    GetPoints getPoints = Provider.of(context, listen: true);
+    GetPoints getPointsFalse = Provider.of(context, listen: false);
+
+    return GestureDetector(
+      onTap: () async {
+        showAd(); // Show ad when the button is pressed
+      },
+      child: widget.child,
+    );
+  }
+}
+// Method to load the ad
+void loadAd() {
+  RewardedAd.load(
+    adUnitId: adUnitId,
+    request: const AdRequest(),
+    rewardedAdLoadCallback: RewardedAdLoadCallback(
+      onAdLoaded: (ad) {
+          rewardedAd = ad; // Save the loaded ad
+          _isAdLoaded = true;
+        // setState(() {
+        // });
+        print('Rewarded Ad Loaded');
+      },
+      onAdFailedToLoad: (error) {
+          _isAdLoaded = false;
+        // setState(() {
+        // });
+        debugPrint('Ad failed to load: ${error.message}');
+      },
+    ),
+  );
+}
+
+
+Future<bool> showAd() async {
+  if (_isAdLoaded) {
+    Completer<bool> completer = Completer<bool>();
+
+    rewardedAd.show(
+      onUserEarnedReward: (ad, reward) {
+        if (reward.amount == 1) {
+          completer.complete(true);
+        } else {
+          completer.complete(false);
+        }
+        log('User earned reward: ${reward.amount} ${reward.type}');
+      },
+    );
+
+    _isAdLoaded = false;
+    loadAd();
+
+    return completer.future;
+  } else {
+    print("Ad not loaded yet.");
+    return false;
   }
 }

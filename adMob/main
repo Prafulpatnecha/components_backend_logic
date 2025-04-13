@@ -1,0 +1,17 @@
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+void main()
+{
+  MobileAds.instance.initialize().then((InitializationStatus status) {
+    print("Google Mobile Ads SDK initialized: ${status.adapterStatuses}");
+
+    // Set up test devices using the RequestConfiguration
+    MobileAds.instance.updateRequestConfiguration(
+        RequestConfiguration(testDeviceIds: [
+          "e928866c-ae12-466b-a2d6-cb7f88f1660f"//your device ads id
+        ])
+    );
+
+    runApp(MyApp());
+  });
+}
