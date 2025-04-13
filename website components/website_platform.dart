@@ -9,21 +9,25 @@ bool isMobileBrowser = userAgent.contains("iphone") ||
 bool isDesktopBrowser = !isMobileBrowser;
 
 
-
 // -------------------------------------------------------------------------------------------------------------
 
-// void funtion() {
-  
-// if (kIsWeb) {
-//   if (isMobileBrowser) {
-//     print("Running on mobile browser");
-//   } else {
-//     print("Running on desktop browser");
-//   }
-// } else if (Platform.isAndroid) {
-//   print("Android App");
-// } else if (Platform.isIOS) {
-//   print("iOS App");
-// }
+/* todo
+this funtion was also working . not any error found here.
 
-// }
+    void funtion() {
+    
+        if (kIsWeb) {
+          if (isMobileBrowser) {
+            print("Running on mobile browser");
+          } else {
+            print("Running on desktop browser");
+          }
+        } else if (Platform.isAndroid) {
+          print("Android App");
+        } else if (Platform.isIOS) {
+          print("iOS App");
+        }
+
+    }
+
+todo */
