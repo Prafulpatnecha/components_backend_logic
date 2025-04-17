@@ -1,0 +1,46 @@
+
+
+// only this was a small example.
+Future<String> clientDataEntry({
+  required String email,
+  required String company_visitor_name,
+  required String address,
+  required String contact,
+  required String person_to_meet,
+  // required String uploadPathShow,
+  required File image,
+}) async {
+  MultipartRequest request = http.MultipartRequest(
+    'POST',
+    Uri.parse(
+        '${your_api_link}client_data_entry_api.php'),
+  );
+  request.fields['email'] = email;
+  request.fields['company_visitor_name'] = company_visitor_name;
+  request.fields['address'] = address;
+  request.fields['contact'] = contact;
+  request.fields['person_to_meet'] = person_to_meet;
+  request.fields['meeting'] = "meeting";
+  request.fields['datatime'] = DateTime.now().toString();
+
+  var pic = await http.MultipartFile.fromPath('image', image.path);
+  request.files.add(pic);
+
+  var response = await request.send();
+
+  if (response.statusCode == 200) {
+    final responseData = await http.Response.fromStream(response);
+    final data = jsonDecode(responseData.body);
+    print("object");
+    if (data['status'] == 'Record insertion successful!') {
+      notifyListeners();
+      return "success";
+    } else {
+      notifyListeners();
+      return "error";
+    }
+  } else {
+    notifyListeners();
+    return "error";
+  }
+}
