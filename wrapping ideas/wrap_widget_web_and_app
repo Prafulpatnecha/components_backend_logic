@@ -1,0 +1,39 @@
+
+Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  double screenWidth = constraints.maxWidth;
+
+                                  // Dynamically decide number of columns based on screen width
+                                  int crossAxisCount = screenWidth < 600 ? 2 : 3;
+
+                                  double itemWidth = (screenWidth - (crossAxisCount - 1) * 8) / crossAxisCount;
+                                  double itemHeight = itemWidth * 0.6;
+
+                                  return Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: List.generate(imageGroup.length, (imageIndex) {
+                                      return Container(
+                                        width: itemWidth,
+                                        height: itemHeight,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(15),
+                                          child: Image.network(
+                                            webUrlString + imageGroup[imageIndex]["image"],
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
+                            ],
+                          )
