@@ -1,0 +1,22 @@
+✅ Safe Alternative: addPostFrameCallback
+// Agar aapko context ka use karna hi hai initState() ke baad, toh aap is tarah kar sakte ho:
+
+@override
+void initState() {
+  super.initState();
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    // Ab context safe hai
+    final args = ModalRoute.of(context)?.settings.arguments;
+    print(args);
+  });
+}
+
+// 🔴 Unsafe (Don't do this):
+@override
+void initState() {
+  super.initState();
+
+  // ❌ Direct context use — risky
+  final args = ModalRoute.of(context)?.settings.arguments; // Can throw error
+}
