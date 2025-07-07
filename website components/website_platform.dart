@@ -1,5 +1,4 @@
 import 'dart:html' as html;
-import 'dart:io';
 String userAgent = html.window.navigator.userAgent.toLowerCase();
 
 bool isMobileBrowser = userAgent.contains("iphone") ||
