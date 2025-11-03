@@ -22,15 +22,20 @@ void initState() {
   final args = ModalRoute.of(context)?.settings.arguments; // Can throw error
 }
 
-// 2. ✅ Safe Alternative: Provider ke saath 
 // Error Free Not Any Error Found.
-WidgetsBinding.instance.addPostFrameCallback((_) {
-      final sharePreferencesDataSaveProvider =
-      Provider.of<SharePreferencesDataSaveProvider>(context, listen: false);
-    
-      final email = sharePreferencesDataSaveProvider.email;
-    
-      context.read<DiamondBloc>().add(
-        DiamondGetWithApiToData(email: email),
-      );
-    });
+// 2. ✅ Safe Alternative: Provider ke saath 
+@override
+void initState() {
+  super.initState();
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+        final sharePreferencesDataSaveProvider =
+        Provider.of<SharePreferencesDataSaveProvider>(context, listen: false);
+      
+        final email = sharePreferencesDataSaveProvider.email;
+      
+        context.read<DiamondBloc>().add(
+          DiamondGetWithApiToData(email: email),
+        );
+      });
+}
