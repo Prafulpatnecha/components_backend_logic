@@ -6,6 +6,7 @@
 //   int mediumCount = 0;
 //   int highCount = 0;
 
+
 //   int get lowPoints => (3 + lowCount).clamp(3, 10);
 //   int get mediumPoints => (5 + mediumCount).clamp(5, 20);
 //   int get highPoints => (10 + highCount * 2).clamp(10, 30);
