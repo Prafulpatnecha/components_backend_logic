@@ -12,6 +12,7 @@
 //   int get highPoints => (10 + highCount * 2).clamp(10, 30);
 // }
 
+
 // class DailyTaskManager {
 //   int totalPoints = 0;
 //   int currentStreak = 0;
