@@ -74,6 +74,7 @@
 //         break;
 //     }
 
+
 //     totalPoints += points;
 //     if (totalPoints > 200) totalPoints = 200;
 
