@@ -1,6 +1,5 @@
 // enum TaskDifficulty { low, medium, high }
 
-
 // class TaskProgress {
 //   int lowCount = 0;
 //   int mediumCount = 0;
